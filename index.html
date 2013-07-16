@@ -1,0 +1,47 @@
+<html><head>
+
+<title>Test</title>
+
+<link rel="stylesheet" type="text/css" href="jquery.oneClickEdit.css">
+
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="jquery.oneClickEdit.js"></script>
+
+</head><body>
+
+<h1>Test</h1>
+
+<div class="basic">
+</div>
+
+
+<script>
+	var basic = $(".basic");
+	
+	var text = $('<span/>').addClass('name').appendTo(basic).text('{{click to edit the name}}')
+		.oneClickEdit({success: function (value) {}});
+	basic.append("<br/>");
+	basic.append("<br/>");
+
+	function chr(i) {
+		return String.fromCharCode(i);
+	}
+	
+	var obj = $('<span/>').addClass('side').appendTo(basic).text("{{click to switch}}").oneClickEdit(o={
+		success: function (value, key) {}
+	,	options: function () {
+			var o = {}
+			for (var i=0; i<5; i++) {
+				o[chr(65+i)] = {};
+				for (var j=0; j<5; j++) {
+					o[chr(65+i)][chr(97+i)+j] = chr(65+i)+j; 
+				}
+			}
+			return o;
+		}
+	});
+	basic.append("<br/>");
+	
+	
+</script>
+</body></html>

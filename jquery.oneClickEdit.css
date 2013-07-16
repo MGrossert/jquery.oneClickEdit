@@ -1,0 +1,14 @@
+/*	ALL */
+.jq-onClickEdit {cursor: pointer;}
+.jq-onClickEdit:hover {text-decoration: underline;}
+
+/*	INPUT	*/
+.jq-onClickEdit-input {border: 0;}
+
+/*	SELECT	*/
+.jq-onClickEdit-select {position: relative;}
+.jq-onClickEdit-group {display: block; position: absolute;top: 90%;left: -5px;background: rgba(0, 0, 0, 0.7); color: #FFF; border-radius: 4px;}
+.jq-onClickEdit-group .jq-onClickEdit-element{display: block; cursor: pointer; padding:0 5px; }
+.jq-onClickEdit-group .jq-onClickEdit-element:hover{background: rgba(255, 255, 255, 0.2);}
+.jq-onClickEdit-subgroup {display: block;}
+.jq-onClickEdit-subgroup>span:hover{background: rgba(255, 255, 255, 0.2);}
