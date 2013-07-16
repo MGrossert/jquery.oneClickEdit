@@ -1,14 +1,18 @@
 /*	ALL */
-.jq-onClickEdit {cursor: pointer;}
-.jq-onClickEdit:hover {text-decoration: underline;}
+.jq-oneClickEdit {cursor: pointer;}
+.jq-oneClickEdit:hover {text-decoration: underline;}
 
 /*	INPUT	*/
-.jq-onClickEdit-input {border: 0;}
+.jq-oneClickEdit-input {border: 0;}
 
 /*	SELECT	*/
-.jq-onClickEdit-select {position: relative;}
-.jq-onClickEdit-group {display: block; position: absolute;top: 90%;left: -5px;background: rgba(0, 0, 0, 0.7); color: #FFF; border-radius: 4px;}
-.jq-onClickEdit-group .jq-onClickEdit-element{display: block; cursor: pointer; padding:0 5px; }
-.jq-onClickEdit-group .jq-onClickEdit-element:hover{background: rgba(255, 255, 255, 0.2);}
-.jq-onClickEdit-subgroup {display: block;}
-.jq-onClickEdit-subgroup>span:hover{background: rgba(255, 255, 255, 0.2);}
+.jq-oneClickEdit-select {position: relative;}
+.jq-oneClickEdit-group {display: block; position: absolute;top: 90%;left: 0; color: #FFF; border-radius: 4px;padding:2px 5px;background: black;background: rgba(0, 0, 0, 0.7);
+filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#B2000000', EndColorStr='#B2000000');}
+.jq-oneClickEdit-group span {display: block; cursor: pointer; padding:0 5px; margin: 0 -5px; }
+.jq-oneClickEdit-element:hover, .jq-oneClickEdit-text:hover{background: rgba(255, 255, 255, 0.2);
+filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#6EFFFFFF', EndColorStr='#6EFFFFFF');}
+.jq-oneClickEdit-subgroup {display: block;background: rgba(255, 255, 255, 0.15);}
+/* choose different colors for every layer */
+.deep-1{filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#50FFFFFF', EndColorStr='#50FFFFFF');}
+.deep-2 {filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#30FFFFFF', EndColorStr='#30FFFFFF');}

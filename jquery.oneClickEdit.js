@@ -5,16 +5,16 @@
 		,	success: false
 		,	max: 0
 		,	space: 10
-		,	'class': 'jq-onClickEdit'
+		,	'class': 'jq-oneClickEdit'
 		}
 	,	body = $("body")
 	;
 	
 	$.fn.oneClickEdit = function(_i) {
 		// process input
-		var $t = $(this)
-		,	c = $.extend({}, default_config)
-		,	o = false;
+		var me = $(this)
+		,	c = $.extend({}, default_config);
+		
 		switch (true) {
 		default:
 		break; case ($.isArray(_i)):	// options array
@@ -23,60 +23,74 @@
 			c.success = _i;
 		break; case (typeof(_i)=="object"):	// config array
 			$.extend(c, _i);
-		}
+		};
 		
 		// function
-		$t.addClass(c['class']);
+		me.addClass(c['class']);
 		if (!c.options) {
 			// Text
-			$t.bind("click", function() {
-				var val = $t.text();
-				o = $(document.createElement("input"))
-				.addClass(c['class']+'-input')
-				.val(val)
-				.css({
-					fontSize: $t.css('fontSize')
-				,	fontFamily: $t.css('fontFamily')
-				,	fontWeight: $t.css('fontWeight')
-				,	letterSpacing: $t.css('letterSpacing')
-				})
-				.attr({
-					maxlength: (c.max>0)?c.max:null
-				})
-				.bind("keypress keyup", function(e) {
-					o.width($t.html($t.text(o.val()).html().replace(/ /g, "&nbsp;")).width() + c.space);
-				})
-				.bind("blur", function() {
-					if (c.success && $.isFunction(c.success)) {
-						if (c.success(o.val()) != false) {
-							val = o.val();
-						}
-					} else {
-						val = o.val();
-					}
-					$t.text(val).show();
-					o.remove();
-					o = false;
-				});
+			me.bind("click", function() {
+				var val = me.text()
+				,	obj = $(document.createElement("input"))
+					.addClass(c['class']+'-input')
+					.val(val)
+					.css({
+						width: me.css('width')
+					,	fontSize: me.css('fontSize')
+					,	fontFamily: me.css('fontFamily')
+					,	fontWeight: me.css('fontWeight')
+					,	letterSpacing: me.css('letterSpacing')
+					})
+					.attr({
+						maxlength: (c.max>0)?c.max:null
+					})
+					.bind("keypress keyup", function(e) {
+						obj.width(me.html(me.text(this.value).html().replace(/ /g, "&nbsp;")).width() + c.space);
+					})
+					.bind("blur", function() {
+						if (c.success && $.isFunction(c.success)) {
+							if (c.success($o.val()) != false) {
+								val = obj.val();
+							}
+						} else {
+							val = obj.val();
+						};
+						me.text(val).show();
+						obj.remove();
+						obj = false;
+					});
 				
 				// insert only at the end!
-				o.insertAfter($t.hide()).keyup().focus();
+				obj.insertAfter(me.hide()).focus();
 				return false;
 			});
 		} else {
 			// Select
-			$t.bind("click", function() {
-				var opt = ($.isFunction(c.options))?c.options():c.options;
-				var	dsp = $t.clone()
+			me.bind("click", function() {
+				var opt = ($.isFunction(c.options))?c.options():c.options
+				,	forceClose = false
+				,	close = function(e) {
+						if(typeof(e)=='undefined' || obj.find(e.target).length == 0) {
+							sel.slideUp(function(){
+								me.show();
+								obj.remove();
+							});
+							$(document).unbind("click", close);
+						}
+					}
+				,	dsp = me.clone()
 						.removeClass(c['class'])
 						.addClass(c['class']+'-display')
 				,	fnc = function(_o, _d) {
+						if (typeof(_o) != "object") {
+							console.log("wrong options type! type: " + typeof(_o));
+							return false;
+						};
 						if (!$.isNumeric(_d)) _d = 0;
 						var grp = $(document.createElement("span"))
 							.addClass(c['class']+'-'+((_d==0)?'group':'subgroup deep-'+_d))
 							.hide()
-						,	elms = $("")
-						;
+						,	elms = $("");
 						$.each(_o, function(key, val) {
 							var elm, sub;
 							switch(typeof(val)) {
@@ -89,16 +103,12 @@
 									.bind('click', function(e){
 										var ret = true;
 										if (c.success && $.isFunction(c.success)) {
-											ret = (c.success(key, val));
-										}
+											ret = (c.success(val, key));};
 										if (ret!=false) {
 											dsp.text(val);
-											$t.text(val);
-										}
-										sel.slideUp(function(){
-											$t.show();
-											o.remove();
-										});
+											me.text(val);
+										};
+										close();
 									})
 									.appendTo(grp)
 								);
@@ -108,19 +118,19 @@
 									.addClass(c['class']+'-wrapper')
 									.append(
 										$(document.createElement("span"))
-										.addClass(c['class']+'-element')
+										.addClass(c['class']+'-text')
 										.text(key)
 										.bind('click', function(e){
 											if (sub.css('display')=='none') {
-												console.log("hide other");
-												console.log(elms);
 												elms.stop().not(elm).slideUp();
+												sub.stop().slideDown();
 											} else {
-												console.log("show other");
 												elms.stop().not(elm).slideDown();
+												sub.stop().slideUp(function(){
+													$('.'+c['class']+'-wrapper, .'+c['class']+'-element', elm).stop().show();
+													$('.'+c['class']+'-subgroup', elm).stop().hide();
+												});
 											}
-											sub.stop().slideToggle();
-											
 										})
 									)
 									.append(sub = fnc(val, _d+1))
@@ -130,16 +140,17 @@
 						});
 						return grp;
 					}
-				,	sel = fnc(opt);
-				o = $(document.createElement("span"))
+				,	sel = fnc(opt)
+				,	obj = $(document.createElement("span"))
 					.addClass(c['class']+'-select')
 					.append(dsp)
 					.append(sel)
-					.insertAfter($t.hide());
+					.insertAfter(me.hide());
+				$(document).bind("click", close);
 				sel.slideDown();
 				return false;
 			});
 		}
 		
-	};
+	}
 }( jQuery ));

@@ -9,7 +9,7 @@
 
 </head><body>
 
-<h1>Test</h1>
+<h1>oneClickEdit</h1>
 
 <div class="basic">
 </div>
@@ -34,7 +34,10 @@
 			for (var i=0; i<5; i++) {
 				o[chr(65+i)] = {};
 				for (var j=0; j<5; j++) {
-					o[chr(65+i)][chr(97+i)+j] = chr(65+i)+j; 
+					o[chr(65+i)][chr(65+i)+j] = {};
+					for (var k=0; k<5; k++) {
+						o[chr(65+i)][chr(65+i)+j][chr(97+i)+j+chr(97+k)] = chr(65+i)+j+chr(97+k); 
+					}
 				}
 			}
 			return o;
